@@ -31,12 +31,12 @@ const styles = StyleSheet.create({
     title: {
       fontSize: 18,
       fontWeight: "bold",
-      marginTop: 20,
+      marginTop: 40,
       marginBottom: 20,
     },
     list: {
       flex: 1,
-      width: "80%",
+      width: "90%",
       marginBottom: 20,
     },
     item: {
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
       padding: 5,
     },
     button: {
-      width: "80%",
+      width: "90%",
       borderTopWidth: 1,
       borderBottomColor: "#111",
       paddingTop: 10,
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
       bottom: 20,
     },
     divisionLine: {
-      width: "80%",
+      width: "90%",
       borderBottomWidth: 1,
       borderBottomColor: "#111",
       marginBottom: 20,

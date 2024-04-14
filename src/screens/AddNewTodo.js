@@ -1,34 +1,82 @@
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import { ImageButton } from "../components/ImageButton";
+import { ScreenTitle } from "../components/ScreenTitle";
+import { useState } from "react";
+import { CustomAlert } from "../components/CustomAlert";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const AddNewTodo = () => {
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
+
+    const titleChangeHandler = (text) => {
+        setTitle(text);
+    };
+    const descriptionChangeHandler = (text) => {
+        setDescription(text);
+    };
+    const clearFields = () => {
+        setTitle("");
+        setDescription("");
+    };
+    const saveTodo = async (todo) => {
+        try {
+            const existingTodos = await AsyncStorage.getItem("todos");
+            let updatedTodos = [];
+            if (existingTodos) {
+                updatedTodos = JSON.parse(existingTodos);
+            }
+            updatedTodos.push(todo);
+            await AsyncStorage.setItem("todos", JSON.stringify(updatedTodos));
+            CustomAlert("Todo Added Succesfully");
+            clearFields();
+        } catch (error) {
+            console.error("Error while saving todo: ", error);
+        }
+    };
+    const saveHandler = () => {
+        if (title.trim() !== "" && description.trim() !== "") {
+            saveTodo({
+                id: Date.now(),
+                title: title,
+                description: description,
+                finished: false,
+            });
+        }
+    };
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Add New Todo</Text>
-            <View style={styles.divisionLine}></View>
+            <ScreenTitle label={"Add New Todo"}></ScreenTitle>
             <View style={styles.inputContainer}>
                 <Text style={styles.textInContainer}>Title</Text>
-                <TextInput style={styles.input} placeholder="Title" />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Title"
+                    value={title}
+                    onChangeText={titleChangeHandler}
+                />
                 <Text style={styles.textInContainer}>Description</Text>
                 <TextInput
                     style={[styles.input, styles.multiline]}
                     placeholder="Description"
                     multiline={true}
                     numberOfLines={4}
+                    value={description}
+                    onChangeText={descriptionChangeHandler}
                 />
             </View>
             <View style={styles.button}>
                 <ImageButton
-                    icon="add-circle-sharp"
-                    label="Cancel"
+                    icon="arrow-back-circle"
+                    label="Back"
                     color="red"
-                    screen="Home"
+                    screen="Back"
                 ></ImageButton>
                 <ImageButton
-                    icon="add-circle-sharp"
+                    icon="save"
                     label="Save"
                     color="green"
-                    screen="Home"
+                    onClick={saveHandler}
                 ></ImageButton>
             </View>
         </View>
@@ -40,19 +88,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#ccc",
         alignItems: "center",
-        // justifyContent: "center",
-    },
-    title: {
-        fontSize: 18,
-        fontWeight: "bold",
-        marginTop: 40,
-        marginBottom: 20,
-    },
-    divisionLine: {
-        width: "90%",
-        borderBottomWidth: 1,
-        borderBottomColor: "#111",
-        marginBottom: 20,
     },
     input: {
         height: 40,

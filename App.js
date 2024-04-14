@@ -10,7 +10,7 @@ export default function App() {
         <NavigationContainer>
             <Stack.Navigator>
                 <Stack.Screen name="Home" component={Home} />
-                <Stack.Screen name="AddNewTodo" component={AddNewTodo} />
+                <Stack.Screen name="Add New Todo" component={AddNewTodo} />
             </Stack.Navigator>
         </NavigationContainer>
     );

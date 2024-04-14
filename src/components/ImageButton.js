@@ -2,16 +2,34 @@ import { Text, View, StyleSheet, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
-export const ImageButton = ({ color, icon, screen, label }) => {
+export const ImageButton = ({ color, icon, screen, label, onClick }) => {
     const navigation = useNavigation();
+    const pressHandler = () => {
+        if (screen && !onClick) {
+            if (screen !== "Back") {
+                navigation.navigate(screen);
+            } else {
+                navigation.goBack();
+            }
+        } else if (!screen && onClick) {
+            onClick();
+        } else if (screen && onClick) {
+            onClick();
+            if (screen !== "Back") {
+                navigation.navigate(screen);
+            } else {
+                navigation.goBack();
+            }
+        }
+    };
     return (
         <Pressable
             style={({ pressed }) => (pressed ? { opacity: 0.5 } : {})}
-            onPress={() => navigation.navigate(screen)}
+            onPress={pressHandler}
         >
             <View style={styles.container}>
-                <Ionicons name={icon} size={20} color={color} />
-                <Text style={styles.text}>{label}</Text>
+                {icon && <Ionicons name={icon} size={20} color={color} />}
+                {label && <Text style={styles.text}>{label}</Text>}
             </View>
         </Pressable>
     );
@@ -20,10 +38,8 @@ export const ImageButton = ({ color, icon, screen, label }) => {
 const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 10,
-        paddingVertical: 5,
+        paddingVertical: 10,
         backgroundColor: "#ADD8E6",
-        borderWidth: 1,
-        borderColor: "black",
         borderRadius: 10,
         flexDirection: "row",
         justifyContent: "center",
